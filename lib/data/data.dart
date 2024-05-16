@@ -1,7 +1,7 @@
 
 
 import 'package:clock_app_flutter/models/menu_info.dart';
-import 'package:clock_app_flutter/menu_type.dart';
+import 'package:clock_app_flutter/constants/menu_type.dart';
 
 import '../models/alarm_info.dart';
 

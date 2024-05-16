@@ -1,7 +1,7 @@
 
 import 'package:clock_app_flutter/constants/color_constants.dart';
 import 'package:clock_app_flutter/data/data.dart';
-import 'package:clock_app_flutter/menu_type.dart';
+import 'package:clock_app_flutter/constants/menu_type.dart';
 import 'package:clock_app_flutter/models/menu_info.dart';
 import 'package:clock_app_flutter/screens/alarm_page.dart';
 import 'package:flutter/material.dart';

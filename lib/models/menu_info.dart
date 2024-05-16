@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../menu_type.dart';
+import '../constants/menu_type.dart';
 
 class MenuInfoProvider extends ChangeNotifier{
 

@@ -54,7 +54,7 @@ class _ClockPageState extends State<ClockPage> {
             child: Align(
               alignment: Alignment.center,
               child: ClockView(
-                size: MediaQuery.of(context).size.height / 4,
+                size: MediaQuery.of(context).size.height / 3,
               ),
             ),
           ),
@@ -113,7 +113,7 @@ class DigitalClockWidgetState extends State<DigitalClockWidget> {
       var currentMinute = DateTime.now().minute;
       if (perviousMinute != currentMinute)
         setState(() {
-          formattedTime = DateFormat('HH:mm').format(DateTime.now());
+          formattedTime = DateFormat("h:mm a").format(DateTime.now());
         });
     });
     super.initState();
@@ -130,7 +130,7 @@ class DigitalClockWidgetState extends State<DigitalClockWidget> {
     print('=====>digital clock updated');
     return Text(
       formattedTime,
-      style: TextStyle(fontFamily: 'avenir', color: CustomColors.primaryTextColor, fontSize: 64),
+      style: TextStyle(fontFamily: 'avenir', color: CustomColors.primaryTextColor, fontSize: 52),
     );
   }
 }

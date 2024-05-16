@@ -46,35 +46,32 @@ class ClockPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var centerx = size.width / 2;
-    var centery = size.height / 2;
-    var center = Offset(centerx, centery);
-    var radius = min(centerx, centery);
+    var centerX = size.width / 2;
+    var centerY = size.height / 2;
+    var center = Offset(centerX, centerY);
 
+    var radius = min(centerX, centerY);
+
+   //Draw fillbrush fill
     var fillBrush = Paint()..color = color2;
+    canvas.drawCircle(center, radius *.75, fillBrush);
 
+    //Draw outline
     var outLineBrush = Paint()
       ..color = color3
       ..strokeWidth = size.width/20
       ..style = PaintingStyle.stroke;
+    canvas.drawCircle(center, radius *.75, outLineBrush);
 
-    var centerFillBrush = Paint()..color = color3;
+    // Draw clock numbers
+    for (int i = 1; i <= 12; i++) {
+      double angle = (i * 30) * pi / 180;
+      double x = centerX + 0.6 * radius * cos(angle);
+      double y = centerY + 0.6 * radius * sin(angle);
+      drawRotatedText(canvas, i.toString(), Offset(x, y), pi / 2); // Rotate each number 90 degrees anticlockwise
+    }
 
-    var secHandBrush = Paint()
-      ..color = Colors.orange[300]!
-      ..strokeCap=StrokeCap.round
-      ..strokeWidth =size.width/60
-      ..style = PaintingStyle.stroke;
-
-    var minHandBrush = Paint()
-      ..shader =
-          const RadialGradient(colors: [color6, color5 ]).createShader(
-        Rect.fromCircle(center: center, radius: radius),
-      )
-      ..strokeCap=StrokeCap.round
-      ..strokeWidth = size.width/30
-      ..style = PaintingStyle.stroke;
-
+    // Draw Hour Hand
     var hourHandBrush = Paint()
       ..shader =
        const RadialGradient(colors: [color4,color5]).createShader(
@@ -83,23 +80,39 @@ class ClockPainter extends CustomPainter {
       ..strokeCap=StrokeCap.round
       ..strokeWidth = size.width/24
       ..style = PaintingStyle.stroke;
-
-    canvas.drawCircle(center, radius *.75, fillBrush);
-    canvas.drawCircle(center, radius *.75, outLineBrush);
-
-    var hourHandX = centerx + radius * 0.4 * cos((dateTime.hour * 30 + dateTime.minute*0.5) * pi / 180);
-    var hourHandY = centerx + radius * 0.4 * sin((dateTime.hour * 30 + dateTime.minute*0.5) * pi / 180);
+    double hourHandX = centerX + radius * 0.35 * cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+    double hourHandY = centerY + radius * 0.35 * sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
     canvas.drawLine(center,  Offset(hourHandX, hourHandY), hourHandBrush);
 
-    var minHandX = centerx + radius * 0.6 * cos(dateTime.minute *6 *pi/180);
-    var minHandY = centerx + radius * 0.6 *sin(dateTime.minute *6 *pi/180);
+    // Draw minute Hand
+    var minHandBrush = Paint()
+      ..shader =
+      const RadialGradient(colors: [color6, color5 ]).createShader(
+        Rect.fromCircle(center: center, radius: radius),
+      )
+      ..strokeCap=StrokeCap.round
+      ..strokeWidth = size.width/30
+      ..style = PaintingStyle.stroke;
+    double minHandX = centerX + radius * 0.5 * cos(dateTime.minute * 6 * pi / 180);
+    double minHandY = centerY + radius * 0.5 * sin(dateTime.minute * 6 * pi / 180);
     canvas.drawLine(center,  Offset(minHandX, minHandY), minHandBrush);
 
-    var secHandX = centerx + radius * 0.6 * cos(dateTime.second*6 *pi/180);
-    var secHandY = centerx + radius * 0.6 *sin(dateTime.second*6 *pi/180);
+    // Draw Second Hand
+    var secHandBrush = Paint()
+      ..color = Colors.orange[300]!
+      ..strokeCap=StrokeCap.round
+      ..strokeWidth =size.width/60
+      ..style = PaintingStyle.stroke;
+    double secHandX = centerX + radius * 0.6 * cos(dateTime.second * 6 * pi / 180);
+    double secHandY = centerY + radius * 0.6 * sin(dateTime.second * 6 * pi / 180);
     canvas.drawLine(center,  Offset(secHandX, secHandY), secHandBrush);
-    canvas.drawCircle(center, radius * 0.12, centerFillBrush);
 
+    // Draw center fill
+    var centerFillBrush = Paint()..color = color3;
+    canvas.drawCircle(center, radius * 0.1, centerFillBrush);
+
+
+    //Draw Dashes
     var outerCircleRadius = radius;
     var innerCircleRadius = radius*0.9;
     var dashBrush = Paint()
@@ -107,15 +120,35 @@ class ClockPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 1;
-
     for (double i = 0; i < 360; i += 12) {
-      var x1 = centerx + outerCircleRadius * cos(i * pi / 180);
-      var y1 = centery + outerCircleRadius * sin(i * pi / 180);
+      var x1 = centerX + outerCircleRadius * cos(i * pi / 180);
+      var y1 = centerY + outerCircleRadius * sin(i * pi / 180);
 
-      var x2 = centerx + innerCircleRadius * cos(i * pi / 180);
-      var y2 = centery + innerCircleRadius * sin(i * pi / 180);
+      var x2 = centerX + innerCircleRadius * cos(i * pi / 180);
+      var y2 = centerY + innerCircleRadius * sin(i * pi / 180);
       canvas.drawLine(Offset(x1, y1), Offset(x2, y2), dashBrush);
     }
+  }
+  void drawRotatedText(Canvas canvas, String text, Offset position, double angle) {
+    canvas.save();
+    canvas.translate(position.dx, position.dy);
+    canvas.rotate(angle);
+    TextSpan span = TextSpan(
+      text: text,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 18.0,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+    TextPainter tp = TextPainter(
+      text: span,
+      textAlign: TextAlign.center,
+      textDirection: TextDirection.ltr,
+    );
+    tp.layout();
+    tp.paint(canvas, Offset(-tp.width / 2, -tp.height / 2));
+    canvas.restore();
   }
 
   @override

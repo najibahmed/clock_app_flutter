@@ -1,6 +1,6 @@
 
 import 'package:sqflite/sqflite.dart';
-import 'models/alarm_info.dart';
+import 'alarm_info.dart';
 
 final String tableAlarm = 'alarm';
 final String columnId = 'id';
